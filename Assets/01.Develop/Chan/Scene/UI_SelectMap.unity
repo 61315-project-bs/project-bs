@@ -524,8 +524,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 043b0eca188e0e74f92d752028f60851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxLevel: 2
-  _maps: []
+  _maps:
+  - _name: Orange Planet
+    _desc: "\uC774 \uD589\uC131\uC740 \uC2DC\uD07C\uD558\uB2E4."
+    _mapIcon: {fileID: 21300000, guid: 2e6bd64cf601a9b4595460e7b6f1049b, type: 3}
+    _isLock: 0
+  - _name: asdasd
+    _desc: "\uC774 \uD589\uC131\uC740 \uC2DC\uD07C\uD558\uB2E4."
+    _mapIcon: {fileID: 21300000, guid: 2e6bd64cf601a9b4595460e7b6f1049b, type: 3}
+    _isLock: 1
+  - _name: asfafagf
+    _desc: "\uC774 \uD589\uC131\uC740 \uC2DC\uD07C\uD558\uB2E4."
+    _mapIcon: {fileID: 21300000, guid: 2e6bd64cf601a9b4595460e7b6f1049b, type: 3}
+    _isLock: 1
+  - _name: sdgsdgsdgsdg
+    _desc: "\uC774 \uD589\uC131\uC740 \uC2DC\uD07C\uD558\uB2E4."
+    _mapIcon: {fileID: 21300000, guid: 2e6bd64cf601a9b4595460e7b6f1049b, type: 3}
+    _isLock: 1
 --- !u!4 &1304052552
 Transform:
   m_ObjectHideFlags: 0

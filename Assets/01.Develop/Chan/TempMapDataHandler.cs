@@ -3,29 +3,72 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-//[Serializable]
-//public class Map
-//{
-//    [SerializeField] private string _name;
-//    [SerializeField] private string _desc;
-//    [SerializeField] private Sprite _mapIcon;
-//    [SerializeField] private bool _isLock;
-//    public Sprite Icon { get { return _mapIcon; } }
-//    public string Name { get { return _name; } }
-//    public string Desc { get { return _desc; } }
-//    public bool IsLock { get { return _isLock; } }
-//}
+[Serializable]
+public class Map
+{
+    [SerializeField] private string _name;
+    [SerializeField] private string _desc;
+    [SerializeField] private Sprite _mapIcon;
+    [SerializeField] private bool _isLock;
+    public Sprite Icon 
+    { 
+        get 
+        {
+            if (_isLock)
+                return ResourceManager.Instance.Load<Sprite>("Art/Sprite/Img_Lock");
+            else
+                return _mapIcon; 
+        } 
+    }
+    public string Name 
+    { 
+        get 
+        {
+            if (_isLock)
+                return "???";
+            else
+                return _name; 
+        } 
+    }
+    public string Desc 
+    { 
+        get 
+        {
+            if (_isLock)
+                return "아직 확인되지 않은 지역입니다.";
+            else
+                return _desc; 
+        } 
+    }
+    public bool IsLock { get { return _isLock; } }
+}
 
 
 
 public class TempMapDataHandler : Singleton<TempMapDataHandler>
 {
+    #region Map
+    [SerializeField] private Map[] _maps;
+    private int _selectMapIdx = -1;
+    public Map[] Maps { get { return _maps; } }
+    /// <summary>
+    /// -1은 맵을 선택하지 않은 상태.
+    /// </summary>
+    public int SelectMapIdx
+    {
+        get { return _selectMapIdx; }
+        set
+        {
+            if (value > _maps.Length - 1)
+                Debug.LogError($"[TempMapDataHandler]::::CurrMapIdx is invalid. -> {value}");
+            else
+                _selectMapIdx = value;
+        }
+    }
+    #endregion~Map
+    #region SetLevel
     private readonly string[] STR_LEVEL = { "easy", "medium", "hard" };
-
     private int _maxLevel; 
-    //[SerializeField] private Map[] _maps;
-
-    //private int _selectMapIdx;
     private int _currLevel = 0;
     
     public string CurrLevelStr { get { return STR_LEVEL[_currLevel]; } }
@@ -42,15 +85,7 @@ public class TempMapDataHandler : Singleton<TempMapDataHandler>
                 _currLevel = value;
         }
     }
-    //public int SelectMapIdx { get { return _selectMapIdx; } 
-    //    set
-    //    {
-    //        if (value > _maps.Length - 1)
-    //            Debug.LogError($"[TempMapDataHandler]::::CurrMapIdx is invalid. -> {value}");
-    //        else
-    //            _selectMapIdx = value;
-    //    }
-    //}
+    #endregion~SetLevel
 
     private void Start()
     {
