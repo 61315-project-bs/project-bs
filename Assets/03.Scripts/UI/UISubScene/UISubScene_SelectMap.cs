@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UniRx;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class UISubScene_SelectMap : UISubScene
@@ -10,51 +11,48 @@ public class UISubScene_SelectMap : UISubScene
     [SerializeField] private Button _decision;
     private UISubScene_SelectMap_Presenter presenter;
     public Button[] BtnSetLevel { get { return _btnsSetLevel; } }
+    public Button BtnDecision { get { return _decision; } }
+    public Button OpenTestOverlap { get { return  OpenTestOverlapSubSceneButton; } }
+    public Text TxtSetLevel { get { return _txtSetLevel; } }
 
     protected override void Awake()
     {
         base.Awake();
         presenter = new UISubScene_SelectMap_Presenter(this);
-        presenter.Init(_btnsSetLevel);
-        InitializeButtons();
-    }
-
-    private void InitializeButtons()
-    {
-        OpenTestOverlapSubSceneButton.onClick.AddListener(presenter.OpenTestOverlapSubScene);
-        _btnsSetLevel[0].onClick.AddListener(() => presenter.SetLevel(_txtSetLevel, true));
-        _btnsSetLevel[1].onClick.AddListener(() => presenter.SetLevel(_txtSetLevel, false));
-        //_decision.onClick.AddListener(() => UIManager.Instance.InstantiateUIPopup<UIPopup>("ss"));
     }
 }
 
 public class UISubScene_SelectMap_Presenter : Presenter<UISubScene_SelectMap>
 {
-    public UISubScene_SelectMap_Presenter(UISubScene_SelectMap view) : base(view) { }
-
-    /// <summary>
-    /// 좋은 방법은 아닌듯..일단 임시로 구현
-    /// </summary>
-    private Button[] _btnSetLevel;
-
-    public void Init(Button[] btnSetLevel)
+    public UISubScene_SelectMap_Presenter(UISubScene_SelectMap view) : base(view) 
     {
-        _btnSetLevel = btnSetLevel;
-    }
-    public void SetLevel(Text text, bool isLeft)
-    {
-        if (isLeft)
+        TempMapDataHandler.Instance.ReactCurrLevel
+            .AsObservable()
+            .Subscribe(level => 
+            {
+                if (level < 0)
+                    level = 0;
+                if (level > TempMapDataHandler.Instance.MaxLevel)
+                    level = TempMapDataHandler.Instance.MaxLevel;
+                view.BtnSetLevel[0].interactable = level != 0;
+                view.BtnSetLevel[1].interactable = level != TempMapDataHandler.Instance.MaxLevel;
+                view.TxtSetLevel.text = TempMapDataHandler.Instance.STR_LEVEL[level];
+            });
+        view.BtnSetLevel[0].OnClickAsObservable()
+        .Subscribe(_ =>
+        {
             TempMapDataHandler.Instance.CurrLevel--;
-        else
+        });
+        view.BtnSetLevel[1].OnClickAsObservable()
+        .Subscribe(_ =>
+        {
             TempMapDataHandler.Instance.CurrLevel++;
-        //_view.BtnSetLevel[0].interactable = true;
-        _btnSetLevel[0].interactable = TempMapDataHandler.Instance.CurrLevel != 0;
-        _btnSetLevel[1].interactable = TempMapDataHandler.Instance.CurrLevel != TempMapDataHandler.Instance.MaxLevel;
+        });
+        view.OpenTestOverlap.OnClickAsObservable()
+        .Subscribe(_ =>
+        {
+            UIManager.Instance.InstantiateUISubScene<UISubScene_Test>();
+        });
+    }
 
-        text.text = TempMapDataHandler.Instance.CurrLevelStr;
-    }
-    public void OpenTestOverlapSubScene()
-    {
-        UIManager.Instance.InstantiateUISubScene<UISubScene_Test>();
-    }
 }
