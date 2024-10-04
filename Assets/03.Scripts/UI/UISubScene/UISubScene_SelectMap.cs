@@ -1,6 +1,8 @@
 ﻿using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System;
 
 public class UISubScene_SelectMap : UISubScene
 {
@@ -20,6 +22,12 @@ public class UISubScene_SelectMap : UISubScene
         base.Awake();
         presenter = new UISubScene_SelectMap_Presenter(this);
     }
+    protected override void OnDestory()
+    {
+        base.OnDestory();
+        presenter.DisopseStreams();
+        presenter = null;
+    }
 }
 
 public class UISubScene_SelectMap_Presenter : Presenter<UISubScene_SelectMap>
@@ -27,32 +35,42 @@ public class UISubScene_SelectMap_Presenter : Presenter<UISubScene_SelectMap>
     public UISubScene_SelectMap_Presenter(UISubScene_SelectMap view) : base(view) 
     {
         TempMapDataHandler.Instance.ReactCurrLevel
-            .AsObservable()
-            .Subscribe(level => 
-            {
-                if (level < 0)
-                    level = 0;
-                if (level > TempMapDataHandler.Instance.MaxLevel)
-                    level = TempMapDataHandler.Instance.MaxLevel;
-                view.BtnSetLevel[0].interactable = level != 0;
-                view.BtnSetLevel[1].interactable = level != TempMapDataHandler.Instance.MaxLevel;
-                view.TxtSetLevel.text = TempMapDataHandler.Instance.STR_LEVEL[level];
-            });
+        .AsObservable()
+        .Subscribe(level => 
+        {
+            if (level < 0)
+                level = 0;
+            if (level > TempMapDataHandler.Instance.MaxLevel)
+                level = TempMapDataHandler.Instance.MaxLevel;
+            view.BtnSetLevel[0].interactable = level != 0;
+            view.BtnSetLevel[1].interactable = level != TempMapDataHandler.Instance.MaxLevel;
+            view.TxtSetLevel.text = TempMapDataHandler.Instance.STR_LEVEL[level];
+        }).EnqueueDispose(_disposables);
+
         view.BtnSetLevel[0].OnClickAsObservable()
         .Subscribe(_ =>
         {
             TempMapDataHandler.Instance.CurrLevel--;
-        });
+        }).EnqueueDispose(_disposables);
+
         view.BtnSetLevel[1].OnClickAsObservable()
         .Subscribe(_ =>
         {
             TempMapDataHandler.Instance.CurrLevel++;
-        });
+        }).EnqueueDispose(_disposables);
+
         view.OpenTestOverlap.OnClickAsObservable()
         .Subscribe(_ =>
         {
             UIManager.Instance.InstantiateUISubScene<UISubScene_Test>();
-        });
+        }).EnqueueDispose(_disposables);
+
+        view.OpenTestOverlap.OnClickAsObservable()
+        .Subscribe(_ =>
+        {
+            UIManager.Instance.InstantiateUISubScene<UISubScene_Test>();
+        }).EnqueueDispose(_disposables);
     }
 
 }
+
