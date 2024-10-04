@@ -31,9 +31,9 @@ public class UISubItem_Map : UISubItem, IPointerEnterHandler, IPointerExitHandle
     }
 }
 
-public class UISubItem_Map_Presenter : Presenter
+public class UISubItem_Map_Presenter : Presenter<UISubItem_Map>
 {
-    public UISubItem_Map_Presenter(UIBase view) : base(view) {}
+    public UISubItem_Map_Presenter(UISubItem_Map view) : base(view) {}
     private Map _mapData;
     private GameObject _mapDetailObj;
     private Image _img;

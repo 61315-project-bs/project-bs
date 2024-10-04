@@ -9,7 +9,7 @@ public class UISubScene_SelectMap : UISubScene
     [SerializeField] private Text _txtSetLevel;
     [SerializeField] private Button _decision;
     private UISubScene_SelectMap_Presenter presenter;
-    
+    public Button[] BtnSetLevel { get { return _btnsSetLevel; } }
 
     protected override void Awake()
     {
@@ -28,9 +28,9 @@ public class UISubScene_SelectMap : UISubScene
     }
 }
 
-public class UISubScene_SelectMap_Presenter : Presenter
+public class UISubScene_SelectMap_Presenter : Presenter<UISubScene_SelectMap>
 {
-    public UISubScene_SelectMap_Presenter(UIBase view) : base(view) { }
+    public UISubScene_SelectMap_Presenter(UISubScene_SelectMap view) : base(view) { }
 
     /// <summary>
     /// 좋은 방법은 아닌듯..일단 임시로 구현
@@ -47,7 +47,7 @@ public class UISubScene_SelectMap_Presenter : Presenter
             TempMapDataHandler.Instance.CurrLevel--;
         else
             TempMapDataHandler.Instance.CurrLevel++;
-
+        //_view.BtnSetLevel[0].interactable = true;
         _btnSetLevel[0].interactable = TempMapDataHandler.Instance.CurrLevel != 0;
         _btnSetLevel[1].interactable = TempMapDataHandler.Instance.CurrLevel != TempMapDataHandler.Instance.MaxLevel;
 

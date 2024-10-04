@@ -1,7 +1,7 @@
-public class Presenter
+public class Presenter<T> where T : UIBase
 {
-  protected UIBase _view;
-  public Presenter(UIBase view)
+  protected T _view;
+  public Presenter(T view)
   {
     _view = view;
   }

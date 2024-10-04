@@ -19,9 +19,9 @@ public class UIPopup_Setting : UIPopup
     }
 }
 
-public class UIPopup_Setting_Presenter : Presenter
+public class UIPopup_Setting_Presenter : Presenter<UIPopup_Setting>
 {
-    public UIPopup_Setting_Presenter(UIBase view) : base(view) { }
+    public UIPopup_Setting_Presenter(UIPopup_Setting view) : base(view) { }
 
     public void OpenTestOverlapPopup()
     {
