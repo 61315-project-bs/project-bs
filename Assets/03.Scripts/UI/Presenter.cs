@@ -10,7 +10,7 @@ public class Presenter<T> where T : UIBase
         _view = view;
         _disposables = new Queue<IDisposable>();
     }
-    public void DisopseStreams()
+    public virtual void Dispose()
     {
         while (_disposables.Count > 0)
             _disposables.Dequeue().Dispose();
