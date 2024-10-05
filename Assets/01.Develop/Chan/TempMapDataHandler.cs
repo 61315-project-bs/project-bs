@@ -50,20 +50,20 @@ public class TempMapDataHandler : Singleton<TempMapDataHandler>
 {
     #region Map
     [SerializeField] private Map[] _maps;
-    private int _selectMapIdx = -1;
+    public IntReactiveProperty ReactSelectMapIdx { get; private set; } = new IntReactiveProperty(-1);
     public Map[] Maps { get { return _maps; } }
     /// <summary>
     /// -1은 맵을 선택하지 않은 상태.
     /// </summary>
     public int SelectMapIdx
     {
-        get { return _selectMapIdx; }
+        get { return ReactSelectMapIdx.Value; }
         set
         {
             if (value > _maps.Length - 1)
                 Debug.LogError($"[TempMapDataHandler]::::CurrMapIdx is invalid. -> {value}");
             else
-                _selectMapIdx = value;
+                ReactSelectMapIdx.Value = value;
         }
     }
     #endregion~Map
