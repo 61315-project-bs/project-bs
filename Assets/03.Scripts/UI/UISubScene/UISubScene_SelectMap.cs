@@ -65,11 +65,6 @@ public class UISubScene_SelectMap_Presenter : Presenter<UISubScene_SelectMap>
             UIManager.Instance.InstantiateUISubScene<UISubScene_Test>();
         }).EnqueueDispose(_disposables);
 
-        view.OpenTestOverlap.OnClickAsObservable()
-        .Subscribe(_ =>
-        {
-            UIManager.Instance.InstantiateUISubScene<UISubScene_Test>();
-        }).EnqueueDispose(_disposables);
     }
 
 }
