@@ -1,8 +1,18 @@
-public class Presenter
+using System.Collections.Generic;
+using System;
+
+public class Presenter<T> where T : UIBase
 {
-  protected UIBase _view;
-  public Presenter(UIBase view)
-  {
-    _view = view;
-  }
+    protected T _view;
+    protected Queue<IDisposable> _disposables;
+    public Presenter(T view)
+    {
+        _view = view;
+        _disposables = new Queue<IDisposable>();
+    }
+    public virtual void Dispose()
+    {
+        while (_disposables.Count > 0)
+            _disposables.Dequeue().Dispose();
+    }
 }

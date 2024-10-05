@@ -1,76 +1,87 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UniRx;
+using UniRx.Triggers;
+using System;
 
-public class UISubItem_Map : UISubItem, IPointerEnterHandler, IPointerExitHandler
+public class UISubItem_Map : UISubItem
 {
     [SerializeField] private Button _btnSelect;
     [SerializeField] private Image _imgMapIcon;
     [SerializeField] private int _mapId;
     [SerializeField] private UISubItem_MapDetail _mapDetail;
     private UISubItem_Map_Presenter _presenter;
+
+    public UISubItem_MapDetail MapDetail { get { return _mapDetail; } }
+
+    public IObservable<Unit> OnClick_BtnSelect { get { return _btnSelect.OnClickAsObservable(); } }
+    public IObservable<PointerEventData> OnPointEnter_BtnSelect { get { return _btnSelect.OnPointerEnterAsObservable(); } }
+    public IObservable<PointerEventData> OnPointExit_BtnSelect { get { return _btnSelect.OnPointerExitAsObservable(); } }
+
+    //public Button BtnSelect { get { return _btnSelect; } }
+    public Image ImgMapIcon { get { return _imgMapIcon; } }
+    public int MapId { get { return _mapId; } }
+
+
     protected override void Awake()
     {
         base.Awake();
         _presenter = new UISubItem_Map_Presenter(this);
-        _presenter.Init(_mapDetail,_imgMapIcon, _btnSelect, _mapId);
-        _btnSelect.onClick.AddListener(() =>
-        {
-            //UIManager.Instance.InstantiateUISubScene<UISubScene_Test>();
-            _presenter.OnSelectMap();
-        });
     }
-    public void OnPointerEnter(PointerEventData eventData)
+    protected override void OnDestroy()
     {
-        _presenter.OnMouseOver(true);
+        base.OnDestroy();
+        _presenter.Dispose();
+        _presenter = null;
     }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _presenter.OnMouseOver(false);
-    }
+    public void SelectButtonActivater(bool isOn) => _btnSelect.interactable = isOn;
 }
 
-public class UISubItem_Map_Presenter : Presenter
+public class UISubItem_Map_Presenter : Presenter<UISubItem_Map>
 {
-    public UISubItem_Map_Presenter(UIBase view) : base(view) {}
-    private Map _mapData;
-    private GameObject _mapDetailObj;
-    private Image _img;
-    private int _idx;
-    private bool _isSelect = false;
-    public void Init(UISubItem_MapDetail mapDetail, Image mapIcon, Button btnSelect, int idx)
+    private GameObject _mapDetailObj = null;
+    public UISubItem_Map_Presenter(UISubItem_Map view) : base(view)
     {
-        _idx = idx;
-        _mapData = TempMapDataHandler.Instance.Maps[_idx];
-        if(_mapData == null)
+        Map mapData = TempMapDataHandler.Instance.Maps[_view.MapId];
+        if (mapData == null)
         {
             Debug.LogError($"[UISubItem_Map_Presenter]::::_mapData is null.");
             return;
         }
-        if (_mapData.IsLock) btnSelect.interactable = false;
-        mapIcon.sprite = _mapData.Icon;
-        _img = mapIcon;
-        SetMapDetail(mapDetail);
+        _view.ImgMapIcon.sprite = mapData.Icon;
+        SetMapDetail(_view.MapDetail, mapData);
+
+        view.OnPointEnter_BtnSelect
+            .Subscribe(_ =>_mapDetailObj.SetActive(true))
+            .EnqueueDispose(_disposables);
+        view.OnPointExit_BtnSelect
+            .Subscribe(_ =>_mapDetailObj.SetActive(false))
+            .EnqueueDispose(_disposables);
+
+        if (mapData.IsLock)
+            view.SelectButtonActivater(false);
+        else
+        {
+            view.SelectButtonActivater(true);
+            view.OnClick_BtnSelect
+                .Subscribe(_ =>TempMapDataHandler.Instance.SelectMapIdx = TempMapDataHandler.Instance.SelectMapIdx == -1 ? _view.MapId : -1)
+                .EnqueueDispose(_disposables);
+            TempMapDataHandler.Instance.ReactSelectMapIdx
+                .Subscribe(idx => OnSelectMap())
+                .EnqueueDispose(_disposables);
+        }
     }
-    private void SetMapDetail(UISubItem_MapDetail mapDetail)
+    private void SetMapDetail(UISubItem_MapDetail mapDetail, Map mapData)
     {
-        mapDetail.SetData(_mapData);
+        mapDetail.SetData(mapData);
         _mapDetailObj = mapDetail.gameObject;
         _mapDetailObj.SetActive(false);
     }
-    public void OnMouseOver(bool isOver)
+    private void OnSelectMap()
     {
-        _mapDetailObj.SetActive(isOver);
-    }
-    public void OnSelectMap()
-    {
-        if (_mapData.IsLock)
-            return;
-        _isSelect = !_isSelect;
-        TempMapDataHandler.Instance.SelectMapIdx = _isSelect ? _idx : -1;
-        Material mat = new Material(_img.material);
-        _img.material = mat;
-        mat.SetFloat("_IsOutline", _isSelect ? 1 : 0);
+        Material mat = new Material(_view.ImgMapIcon.material);
+        _view.ImgMapIcon.material = mat;
+        mat.SetFloat("_IsOutline", TempMapDataHandler.Instance.SelectMapIdx == -1 ? 0 : 1);
     }
 }

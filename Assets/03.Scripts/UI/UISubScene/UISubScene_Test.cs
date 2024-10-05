@@ -9,7 +9,7 @@ public class UISubScene_Test : UISubScene
   }
 }
 
-public class UISubScene_Test_Presenter : Presenter
+public class UISubScene_Test_Presenter : Presenter<UISubScene_Test>
 {
-  public UISubScene_Test_Presenter(UIBase view) : base(view) { }
+  public UISubScene_Test_Presenter(UISubScene_Test view) : base(view) { }
 }
