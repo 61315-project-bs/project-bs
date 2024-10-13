@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using UniRx;
+using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System;
 
 public class UISubScene_SelectMap : UISubScene
 {
@@ -9,52 +12,64 @@ public class UISubScene_SelectMap : UISubScene
     [SerializeField] private Text _txtSetLevel;
     [SerializeField] private Button _decision;
     private UISubScene_SelectMap_Presenter presenter;
-    
+    public Text TxtSetLevel { get { return _txtSetLevel; } }
+
+    // Component 자체를 전달하는 것 보단, stream을 전달하는것이 추후 코드를 볼 때 명확하게 이해할 수 있을 것 같아서 수정 했습니다.
+    public IObservable<Unit> OnClick_SetLevel_Left { get { return _btnsSetLevel[0].OnClickAsObservable(); } }
+    public IObservable<Unit> OnClick_SetLevel_Right { get { return _btnsSetLevel[1].OnClickAsObservable(); } }
+    public IObservable<Unit> OnClick_Decision { get { return _decision.OnClickAsObservable(); } }
+    public IObservable<Unit> OnClick_OpenTestOverlap { get { return  OpenTestOverlapSubSceneButton.OnClickAsObservable(); } }
 
     protected override void Awake()
     {
         base.Awake();
         presenter = new UISubScene_SelectMap_Presenter(this);
-        presenter.Init(_btnsSetLevel);
-        InitializeButtons();
     }
-
-    private void InitializeButtons()
+    protected override void OnDestroy()
     {
-        OpenTestOverlapSubSceneButton.onClick.AddListener(presenter.OpenTestOverlapSubScene);
-        _btnsSetLevel[0].onClick.AddListener(() => presenter.SetLevel(_txtSetLevel, true));
-        _btnsSetLevel[1].onClick.AddListener(() => presenter.SetLevel(_txtSetLevel, false));
-        //_decision.onClick.AddListener(() => UIManager.Instance.InstantiateUIPopup<UIPopup>("ss"));
+        base.OnDestroy();
+        presenter.Dispose();
+        presenter = null;
+    }
+    public void SetLevelActivater(bool isLeft, bool isRight)
+    {
+        if (isLeft == false && isRight == false)
+            return;
+        _btnsSetLevel[0].interactable = isLeft;
+        _btnsSetLevel[1].interactable = isRight;
     }
 }
 
-public class UISubScene_SelectMap_Presenter : Presenter
+public class UISubScene_SelectMap_Presenter : Presenter<UISubScene_SelectMap>
 {
-    public UISubScene_SelectMap_Presenter(UIBase view) : base(view) { }
-
-    /// <summary>
-    /// 좋은 방법은 아닌듯..일단 임시로 구현
-    /// </summary>
-    private Button[] _btnSetLevel;
-
-    public void Init(Button[] btnSetLevel)
+    public UISubScene_SelectMap_Presenter(UISubScene_SelectMap view) : base(view) 
     {
-        _btnSetLevel = btnSetLevel;
-    }
-    public void SetLevel(Text text, bool isLeft)
-    {
-        if (isLeft)
-            TempMapDataHandler.Instance.CurrLevel--;
-        else
-            TempMapDataHandler.Instance.CurrLevel++;
+        TempMapDataHandler.Instance.ReactCurrLevel
+            .AsObservable()
+            .Subscribe(level=>
+            {
+                if (level < 0)
+                    level = 0;
+                if (level > TempMapDataHandler.Instance.MaxLevel)
+                    level = TempMapDataHandler.Instance.MaxLevel;
+                view.SetLevelActivater(level != 0, level != TempMapDataHandler.Instance.MaxLevel);
+                view.TxtSetLevel.text = TempMapDataHandler.Instance.STR_LEVEL[level];
+            })
+            .EnqueueDispose(_disposables);
 
-        _btnSetLevel[0].interactable = TempMapDataHandler.Instance.CurrLevel != 0;
-        _btnSetLevel[1].interactable = TempMapDataHandler.Instance.CurrLevel != TempMapDataHandler.Instance.MaxLevel;
+        view.OnClick_SetLevel_Left
+            .Subscribe(_ =>TempMapDataHandler.Instance.CurrLevel--)
+            .EnqueueDispose(_disposables);
 
-        text.text = TempMapDataHandler.Instance.CurrLevelStr;
+        view.OnClick_SetLevel_Right
+            .Subscribe(_ =>TempMapDataHandler.Instance.CurrLevel++)
+            .EnqueueDispose(_disposables);
+
+        view.OnClick_OpenTestOverlap
+            .Subscribe(_ =>UIManager.Instance.InstantiateUISubScene<UISubScene_Test>())
+            .EnqueueDispose(_disposables);
+
     }
-    public void OpenTestOverlapSubScene()
-    {
-        UIManager.Instance.InstantiateUISubScene<UISubScene_Test>();
-    }
+
 }
+

@@ -19,9 +19,9 @@ public class UIPopup_Test : UIPopup
     }
 }
 
-public class UIPopup_Test_Presenter : Presenter
+public class UIPopup_Test_Presenter : Presenter<UIPopup_Test>
 {
-    public UIPopup_Test_Presenter(UIBase view) : base(view) { }
+    public UIPopup_Test_Presenter(UIPopup_Test view) : base(view) { }
 
     public void AllExit()
     {

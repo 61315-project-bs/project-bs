@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UniRx;
 
 [Serializable]
 public class Map
@@ -49,42 +50,33 @@ public class TempMapDataHandler : Singleton<TempMapDataHandler>
 {
     #region Map
     [SerializeField] private Map[] _maps;
-    private int _selectMapIdx = -1;
+    public IntReactiveProperty ReactSelectMapIdx { get; private set; } = new IntReactiveProperty(-1);
     public Map[] Maps { get { return _maps; } }
     /// <summary>
     /// -1은 맵을 선택하지 않은 상태.
     /// </summary>
     public int SelectMapIdx
     {
-        get { return _selectMapIdx; }
+        get { return ReactSelectMapIdx.Value; }
         set
         {
             if (value > _maps.Length - 1)
                 Debug.LogError($"[TempMapDataHandler]::::CurrMapIdx is invalid. -> {value}");
             else
-                _selectMapIdx = value;
+                ReactSelectMapIdx.Value = value;
         }
     }
     #endregion~Map
     #region SetLevel
-    private readonly string[] STR_LEVEL = { "easy", "medium", "hard" };
-    private int _maxLevel; 
-    private int _currLevel = 0;
-    
-    public string CurrLevelStr { get { return STR_LEVEL[_currLevel]; } }
+    public readonly string[] STR_LEVEL = { "easy", "medium", "hard" };
+    private int _maxLevel;
+    //private int _currLevel = 0;
+    public IntReactiveProperty ReactCurrLevel { get; private set; } = new IntReactiveProperty(0);
     public int MaxLevel { get { return _maxLevel; } }
-    public int CurrLevel { get { return _currLevel; } 
-        set
-        {
-            // 0~2 범위에서만 설정할 수 있게 적용
-            if (value > _maxLevel)
-                _currLevel = _maxLevel;
-            else if (value < 0)
-                _currLevel = 0;
-            else
-                _currLevel = value;
-        }
-    }
+    /// <summary>
+    /// 데이터 저장 시 해당 프로퍼티로 저장하면 될 것 같음.
+    /// </summary>
+    public int CurrLevel { get { return ReactCurrLevel.Value; } set{ ReactCurrLevel.Value = value; } }
     #endregion~SetLevel
 
     private void Start()

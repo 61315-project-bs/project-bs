@@ -28,9 +28,9 @@ public class UIScene_Lobby : UIScene
     }
 }
 
-public class UIScene_Lobby_Presenter : Presenter
+public class UIScene_Lobby_Presenter : Presenter<UIScene_Lobby>
 {
-    public UIScene_Lobby_Presenter(UIBase view) : base(view) { }
+    public UIScene_Lobby_Presenter(UIScene_Lobby view) : base(view) { }
 
     public void OnGoToLab()
     {

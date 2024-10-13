@@ -13,5 +13,5 @@ public abstract class UIBase : MonoBehaviour
 
     protected virtual void OnEnable() { }
 
-    protected virtual void OnDestory() { }
+    protected virtual void OnDestroy() { }
 }
