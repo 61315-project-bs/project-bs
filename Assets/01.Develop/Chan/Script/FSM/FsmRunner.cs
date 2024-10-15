@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
@@ -20,5 +20,10 @@ public class FsmRunner
                 state.Current?.Enter();
             });
     }
+
+    /// <summary>
+    /// FsmRunner 종료시 반드시 Dispose 해줘야 함.
+    /// 활용하는 곳이 MonoBehaviour라면 OnDisable이나 OnDestroy에서 실행될 수 있게 해야함.
+    /// </summary>
     public void Dispose() => _currentState.Dispose();
 }
