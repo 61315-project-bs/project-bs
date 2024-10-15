@@ -15,6 +15,6 @@ MonoBehaviour:
   GroundPrefab: {fileID: 7498459384834782668, guid: d4501c3e7172043f4b1893ba264481cf,
     type: 3}
   Scale: 0.07
-  HeightMultiplier: 6
+  HeightMultiplier: 2
   ChunkSize: 10
   ViewDistance: 3
