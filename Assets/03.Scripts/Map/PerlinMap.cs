@@ -30,6 +30,7 @@ public class PerlinMap : MonoBehaviour
             _previousChunk = currentChunk; // 새로운 청크 위치 저장
         }
     }
+
     // 카메라가 위치한 청크 좌표 계산
     Vector2Int GetCameraChunkPosition()
     {
@@ -46,7 +47,7 @@ public class PerlinMap : MonoBehaviour
         // 카메라 주변 청크를 사각형 범위로 생성
         for (int x = -_setting.ViewDistance; x <= _setting.ViewDistance; x++)
         {
-            for (int z = -_setting.ViewDistance + 2; z <= _setting.ViewDistance; z++)
+            for (int z = -_setting.ViewDistance; z <= _setting.ViewDistance; z++)
             {
                 Vector2Int chunkPos = new Vector2Int(currentChunk.x + x, currentChunk.y + z);
 
@@ -76,25 +77,54 @@ public class PerlinMap : MonoBehaviour
         }
     }
 
-
     void GenerateChunk(Vector2Int chunkPos)
     {
         GameObject chunk = new GameObject($"Chunk_{chunkPos.x}_{chunkPos.y}");
+
+        // 청크 위치 계산 수정
         chunk.transform.position = new Vector3(chunkPos.x * _setting.ChunkSize, 0, chunkPos.y * _setting.ChunkSize);
         chunk.isStatic = true;
         chunk.transform.SetParent(_chunkParent.transform);
 
+        List<CombineInstance> combineInstances = new List<CombineInstance>();
 
+        // 청크 내 타일 생성 및 메쉬 정보 수집
         for (int x = 0; x < _setting.ChunkSize; x++)
         {
             for (int z = 0; z < _setting.ChunkSize; z++)
             {
                 float y = Mathf.PerlinNoise((x + chunkPos.x * _setting.ChunkSize) * _setting.Scale, (z + chunkPos.y * _setting.ChunkSize) * _setting.Scale) * _setting.HeightMultiplier;
 
-                Vector3 position = new Vector3(x + chunkPos.x * _setting.ChunkSize, y, z + chunkPos.y * _setting.ChunkSize);
-                Instantiate(_setting.GroundPrefab, position, Quaternion.identity, chunk.transform);
+                Vector3 position = new Vector3(x, y, z);  // 로컬 좌표로 설정
+                GameObject tile = Instantiate(_setting.GroundPrefab, position, Quaternion.identity, chunk.transform);
+
+                MeshFilter meshFilter = tile.GetComponent<MeshFilter>();
+                if (meshFilter != null)
+                {
+                    CombineInstance combineInstance = new CombineInstance();
+                    combineInstance.mesh = meshFilter.sharedMesh;
+                    combineInstance.transform = tile.transform.localToWorldMatrix; // 타일의 로컬 좌표를 월드 좌표로 변환
+                    combineInstances.Add(combineInstance);
+                }
+
+                Destroy(tile); // 개별 타일은 병합 후 삭제
             }
         }
+
+        // 메쉬 병합
+        Mesh combinedMesh = new Mesh();
+        combinedMesh.CombineMeshes(combineInstances.ToArray(), true, true);
+
+        // 병합된 메쉬를 청크에 적용
+        MeshFilter chunkMeshFilter = chunk.AddComponent<MeshFilter>();
+        chunkMeshFilter.mesh = combinedMesh;
+
+        MeshRenderer chunkMeshRenderer = chunk.AddComponent<MeshRenderer>();
+        chunkMeshRenderer.sharedMaterial = _setting.GroundPrefab.GetComponent<MeshRenderer>().sharedMaterial;
+
+        // 충돌 처리를 위한 MeshCollider 추가
+        MeshCollider chunkMeshCollider = chunk.AddComponent<MeshCollider>();
+        chunkMeshCollider.sharedMesh = combinedMesh;
 
         _chunks.Add(chunkPos, chunk); // 생성된 청크를 딕셔너리에 저장
     }
