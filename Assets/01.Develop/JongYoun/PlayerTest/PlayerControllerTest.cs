@@ -15,7 +15,6 @@ public class PlayerControllerTest : MonoBehaviour
     // Input System에서 호출되는 메서드 (WASD 입력 받음)
     public void OnMove(InputAction.CallbackContext context)
     {
-        Debug.Log("test");
         moveInput = context.ReadValue<Vector2>(); // 2D 벡터 값으로 이동 방향 설정
         UpdateAnimation(); // 애니메이션 상태 업데이트
     }
