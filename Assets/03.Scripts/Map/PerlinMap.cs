@@ -96,7 +96,8 @@ public class PerlinMap : MonoBehaviour
                 float y = Mathf.PerlinNoise((x + chunkPos.x * _setting.ChunkSize) * _setting.Scale, (z + chunkPos.y * _setting.ChunkSize) * _setting.Scale) * _setting.HeightMultiplier;
 
                 Vector3 position = new Vector3(x, y, z);  // 로컬 좌표로 설정
-                GameObject tile = Instantiate(_setting.GroundPrefab, position, Quaternion.identity, chunk.transform);
+                PoolAble tile = PoolManager.Instance.GetGameObject("Tile").GetComponent<PoolAble>();
+                tile.transform.position = position;
 
                 MeshFilter meshFilter = tile.GetComponent<MeshFilter>();
                 if (meshFilter != null)
@@ -107,7 +108,8 @@ public class PerlinMap : MonoBehaviour
                     combineInstances.Add(combineInstance);
                 }
 
-                Destroy(tile); // 개별 타일은 병합 후 삭제
+                // Destroy(tile); // 개별 타일은 병합 후 삭제
+                tile.ReleaseObject();
             }
         }
 
