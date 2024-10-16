@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class PlayerStateHandler
 {
-    public PlayerDefaultState _defaultState { get; private set; }
-    public PlayerIdleState _idleState { get; private set; }
-    public PlayerMoveState _moveState {get; private set; }
+    public PlayerDefaultState DefaultState { get; private set; }
+    public PlayerIdleState IdleState { get; private set; }
+    public PlayerMoveState MoveState {get; private set; }
 
     public PlayerStateHandler(Player player)
     {
-        _defaultState = new PlayerDefaultState(player);
-        _idleState = new PlayerIdleState(player);
-        _moveState = new PlayerMoveState(player);
+        DefaultState = new PlayerDefaultState(player);
+        IdleState = new PlayerIdleState(player);
+        MoveState = new PlayerMoveState(player);
     }
 }

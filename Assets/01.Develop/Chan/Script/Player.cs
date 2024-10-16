@@ -3,33 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-
 public class Player : MonoBehaviour
 {
-    private FsmRunner _fmsRunner;
     private PlayerStateHandler _playerStateHandler;
+    
+    public Animator Animator { get; private set; }
+    public FsmRunner FsmRunner { get; private set; }
+    public PlayerInputController InputController { get; private set; }
     private void Start()
     {
         Init();
     }
     private void Init()
     {
-        _fmsRunner = new FsmRunner();
+        FsmRunner = new FsmRunner();
         _playerStateHandler = new PlayerStateHandler(this);
-    }
-    private void Update()
-    {
-        _fmsRunner.CurrentState?.Update();
-        if(Input.GetKeyDown(KeyCode.A)) _fmsRunner.CurrentState = _playerStateHandler._idleState;
-        if (Input.GetKeyDown(KeyCode.S)) _fmsRunner.CurrentState = _playerStateHandler._moveState;
-    }
-    private void FixedUpdate()
-    {
-        _fmsRunner.CurrentState?.PhysicsUpdate();
+        Animator = GetComponent<Animator>();
+        InitInputController();
     }
 
+    private void InitInputController()
+    {
+        InputController = GetComponent<PlayerInputController>();
+        InputController.MoveDir
+            .AsObservable()
+            .Subscribe(dir =>
+            {
+                if (dir == Vector2.zero) FsmRunner.CurrentState = _playerStateHandler.IdleState;
+                else FsmRunner.CurrentState = _playerStateHandler.MoveState;
+            });
+    }
     private void OnDisable()
     {
-        _fmsRunner.Dispose();
+        FsmRunner.Dispose();
     }
 }
