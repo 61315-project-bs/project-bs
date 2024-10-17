@@ -14,8 +14,10 @@ public class GunController : MonoBehaviour
     private CinemachineBrain _cameraBrain;
     private float _rotOffset = 180;
     private float _distanceToCamera;
+    private Vector3 _mousePosition;
     public void InitGun()
     {
+        // 만약  Cinemachine 카메라를 사용하면서 ScreenToWorldPoint를 사용해야 한다면 반드시 아래 로직을 적용해줘야 한다.
         _cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
         _cameraBrain.m_CameraCutEvent.AddListener((brain) =>
         {
@@ -41,9 +43,9 @@ public class GunController : MonoBehaviour
             .AsObservable()
             .Subscribe(pos =>
             {
-                float _distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, _distanceToCamera));
-                Vector2 newPos = mousePosition - transform.position;
+                _distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
+                _mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, _distanceToCamera));
+                Vector2 newPos = _mousePosition - transform.position;
                 float rotZ = Mathf.Atan2(newPos.y, newPos.x) * Mathf.Rad2Deg + _rotOffset;
                 gameObject.transform.localRotation = Quaternion.Euler(AimDirection_LR(rotZ) == 1 ? 0 : -180, 0, AimDirection_LR(rotZ) == 1 ? rotZ : -rotZ);
                 Vector2 aimDirection = AimDirection(rotZ);
@@ -52,16 +54,14 @@ public class GunController : MonoBehaviour
                 _player.Animator.SetFloat("xDir", aimDirection.x);
                 _player.Animator.SetFloat("yDir", aimDirection.y);
             }).AddTo(gameObject);
+
         Observable.EveryUpdate()
             .Where(click => Input.GetMouseButton(0))
             .ThrottleFirst(TimeSpan.FromSeconds(_player.Temp_PlayerData.AttackSpeed))
             .Subscribe(pos =>
             {
-                float _distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, _distanceToCamera));
-
                 Bullet bullet = Instantiate(_bullet).GetComponent<Bullet>();
-                bullet.SetBullet(new Bullet_Data(_firePos.position, mousePosition, 10, 10));
+                bullet.SetBullet(new Bullet_Data(_firePos.position, _mousePosition, 10, 10));
                 bullet.OnFire();
             }).AddTo(gameObject);
     }
