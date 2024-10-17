@@ -33,6 +33,9 @@
     "m_CategoryData": [
         {
             "m_Id": "e76e1d83093e409eaf8b1c112e2a6d02"
+        },
+        {
+            "m_Id": "5a04b358e53346a788e259061bf5004f"
         }
     ],
     "m_Nodes": [
@@ -845,9 +848,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1496.0003662109375,
-            "y": 744.0001220703125,
-            "width": 155.000244140625,
+            "x": -1730.0,
+            "y": 736.0,
+            "width": 155.0,
             "height": 142.0
         }
     },
@@ -1236,10 +1239,10 @@
     "m_Guid": {
         "m_GuidSerialized": "141111dd-0080-4f0e-ab52-050d40bc549a"
     },
-    "m_Name": "MainHighlightIntensity",
+    "m_Name": "Main Highlight Intensity",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "MainHighlightIntensity",
-    "m_DefaultReferenceName": "_MainHighlightIntensity",
+    "m_RefNameGeneratedByDisplayName": "Main Highlight Intensity",
+    "m_DefaultReferenceName": "_Main_Highlight_Intensity",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1262,7 +1265,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "1458adfdd9aa413abf116b1348a7e563",
     "m_Id": 0,
-    "m_DisplayName": "FresnelColor",
+    "m_DisplayName": "Fresnel Color",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -1289,10 +1292,10 @@
     "m_Guid": {
         "m_GuidSerialized": "6b4837be-e861-4358-8732-31b78fa7f26d"
     },
-    "m_Name": "HologramTiling",
+    "m_Name": "Hologram Tiling",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "HologramTiling",
-    "m_DefaultReferenceName": "_HologramTiling",
+    "m_RefNameGeneratedByDisplayName": "Hologram Tiling",
+    "m_DefaultReferenceName": "_Hologram_Tiling",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1578,7 +1581,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "23030194ae7748eab53f6dc45f46aa49",
     "m_Id": 0,
-    "m_DisplayName": "HologramScanlines",
+    "m_DisplayName": "Hologram Scanlines",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -1591,7 +1594,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "2364cdc6bff54b6fa35538bcc9e27444",
     "m_Id": 0,
-    "m_DisplayName": "ScrollSpeed",
+    "m_DisplayName": "Scroll Speed",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -1608,10 +1611,10 @@
     "m_Guid": {
         "m_GuidSerialized": "e2caafa0-337f-4bf1-963a-4d24b7fb6ee9"
     },
-    "m_Name": "MainTexture",
+    "m_Name": "Main Texture",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "MainTexture",
-    "m_DefaultReferenceName": "_MainTexture",
+    "m_RefNameGeneratedByDisplayName": "Main Texture",
+    "m_DefaultReferenceName": "_Main_Texture",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1801,7 +1804,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
     "m_ObjectId": "2f8aa2c06b6b4f2fa958351decd11933",
     "m_Id": 0,
-    "m_DisplayName": "HologramTiling",
+    "m_DisplayName": "Hologram Tiling",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -1962,10 +1965,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1697.0,
-            "y": 781.0000610351563,
-            "width": 156.0,
-            "height": 33.99993896484375
+            "x": -1931.0,
+            "y": 773.0,
+            "width": 159.0,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -2150,8 +2153,8 @@
     "m_ObjectId": "43953cbebfe64bb79e8658bd4e8df498",
     "m_Title": "Sample Scanlines",
     "m_Position": {
-        "x": -2451.0,
-        "y": 335.0
+        "x": -2901.000244140625,
+        "y": 327.0
     }
 }
 
@@ -2254,7 +2257,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "4a9b7e95b885453e94374458c82d26cc",
     "m_Id": 0,
-    "m_DisplayName": "MainHighlightIntensity",
+    "m_DisplayName": "Main Highlight Intensity",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -2276,9 +2279,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1964.0003662109375,
-            "y": 603.0,
-            "width": 208.0001220703125,
+            "x": -2198.0,
+            "y": 595.0,
+            "width": 208.0,
             "height": 302.0
         }
     },
@@ -2319,10 +2322,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1261.0001220703125,
-            "y": 484.0000305175781,
-            "width": 207.9998779296875,
-            "height": 435.0000305175781
+            "x": -1495.0,
+            "y": 476.0,
+            "width": 208.0,
+            "height": 435.0
         }
     },
     "m_Slots": [
@@ -2374,10 +2377,10 @@
     "m_Guid": {
         "m_GuidSerialized": "baa5dd01-64ae-4289-b6aa-97fba0bf9696"
     },
-    "m_Name": "ScrollSpeed",
+    "m_Name": "Scroll Speed",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "ScrollSpeed",
-    "m_DefaultReferenceName": "_ScrollSpeed",
+    "m_RefNameGeneratedByDisplayName": "Scroll Speed",
+    "m_DefaultReferenceName": "_Scroll_Speed",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -2470,6 +2473,27 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "5a04b358e53346a788e259061bf5004f",
+    "m_Name": "Main",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "6a1e6073cfd64d1c861b0da7d18bdffc"
+        },
+        {
+            "m_Id": "23f759bc6b104fd0a4b1b16a472f6fc9"
+        },
+        {
+            "m_Id": "1457079b7f4c48d1b790c38f9d3d77f1"
+        },
+        {
+            "m_Id": "aca649c63cf948a5b3a5b0422f0970a3"
+        }
+    ]
 }
 
 {
@@ -2863,10 +2887,10 @@
     "m_Guid": {
         "m_GuidSerialized": "abec610b-0a41-4837-a26d-3b5382f7df44"
     },
-    "m_Name": "MainColor",
+    "m_Name": "Main Color",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "MainColor",
-    "m_DefaultReferenceName": "_MainColor",
+    "m_RefNameGeneratedByDisplayName": "Main Color",
+    "m_DefaultReferenceName": "_Main_Color",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -3154,8 +3178,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1696.9998779296875,
-            "y": 579.0,
+            "x": -1931.0,
+            "y": 571.0,
             "width": 128.0,
             "height": 101.0
         }
@@ -3462,7 +3486,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "81b056f87c5f40a2aa8f9a61ad4e363d",
     "m_Id": 0,
-    "m_DisplayName": "MainTexture",
+    "m_DisplayName": "Main Texture",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -3515,10 +3539,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2154.0,
-            "y": 905.0,
-            "width": 126.0001220703125,
-            "height": 118.00006103515625
+            "x": -2627.0,
+            "y": 967.0,
+            "width": 126.0,
+            "height": 118.0
         }
     },
     "m_Slots": [
@@ -3553,10 +3577,10 @@
     "m_Guid": {
         "m_GuidSerialized": "723280e7-bec7-4691-b5e6-5d975bdac500"
     },
-    "m_Name": "HologramScanlines",
+    "m_Name": "Hologram Scanlines",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "HologramScanlines",
-    "m_DefaultReferenceName": "_HologramScanlines",
+    "m_RefNameGeneratedByDisplayName": "Hologram Scanlines",
+    "m_DefaultReferenceName": "_Hologram_Scanlines",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -3699,8 +3723,8 @@
     "m_ObjectId": "94648a922aed4dd38b91e0aa714557d7",
     "m_Title": "Rotation",
     "m_Position": {
-        "x": -2683.55615234375,
-        "y": -1193.3973388671875
+        "x": -2684.0,
+        "y": -1193.0
     }
 }
 
@@ -3740,10 +3764,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1486.0001220703125,
-            "y": 491.00006103515627,
-            "width": 183.9998779296875,
-            "height": 33.99993896484375
+            "x": -1720.0,
+            "y": 483.0,
+            "width": 187.0,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -3869,9 +3893,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 756.0003662109375,
-            "y": 186.99998474121095,
-            "width": 207.9996337890625,
+            "x": 450.0,
+            "y": 164.99998474121095,
+            "width": 207.99993896484376,
             "height": 302.0
         }
     },
@@ -4205,10 +4229,10 @@
     "m_Guid": {
         "m_GuidSerialized": "33a96fa5-c771-4f14-8b15-dfbaf79311a7"
     },
-    "m_Name": "RotationSpeed",
+    "m_Name": "Main Rotation Speed",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "RotationSpeed",
-    "m_DefaultReferenceName": "_RotationSpeed",
+    "m_RefNameGeneratedByDisplayName": "Main Rotation Speed",
+    "m_DefaultReferenceName": "_Main_Rotation_Speed",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -4347,7 +4371,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "bc4f9bb0c00a41d686fcfb3e42abfc65",
     "m_Id": 0,
-    "m_DisplayName": "MainColor",
+    "m_DisplayName": "Main Color",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -4481,11 +4505,11 @@
     "m_Guid": {
         "m_GuidSerialized": "7929af62-1356-4c08-830e-4326a2e6f4da"
     },
-    "m_Name": "FresnelColor",
+    "m_Name": "Fresnel Color",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "FresnelColor",
-    "m_DefaultReferenceName": "_FresnelColor",
-    "m_OverrideReferenceName": "_FresnelColor",
+    "m_RefNameGeneratedByDisplayName": "Fresnel Color",
+    "m_DefaultReferenceName": "_Fresnel_Color",
+    "m_OverrideReferenceName": "_Fresnel_Color",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
@@ -4565,9 +4589,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2403.0,
-            "y": 815.0,
-            "width": 138.0,
+            "x": -2875.999755859375,
+            "y": 878.0,
+            "width": 141.0,
             "height": 33.99993896484375
         }
     },
@@ -4992,10 +5016,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2154.000244140625,
-            "y": 421.0000305175781,
+            "x": -2388.0,
+            "y": 413.0,
             "width": 120.0,
-            "height": 149.00003051757813
+            "height": 149.0
         }
     },
     "m_Slots": [
@@ -5097,10 +5121,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2403.0,
-            "y": 1091.0,
+            "x": -2876.0,
+            "y": 1153.0,
             "width": 124.0,
-            "height": 173.0001220703125
+            "height": 173.0
         }
     },
     "m_Slots": [
@@ -5122,7 +5146,7 @@
     ],
     "synonyms": [],
     "m_Precision": 0,
-    "m_PreviewExpanded": true,
+    "m_PreviewExpanded": false,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
     "m_CustomColors": {
@@ -5198,7 +5222,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "deb3445370064fd999ba5434a477f955",
     "m_Id": 0,
-    "m_DisplayName": "MainColor",
+    "m_DisplayName": "Main Color",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -5264,10 +5288,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2426.000244140625,
-            "y": 394.0000305175781,
+            "x": -2660.0,
+            "y": 386.0,
             "width": 208.0,
-            "height": 314.9999694824219
+            "height": 315.0
         }
     },
     "m_Slots": [
@@ -5353,9 +5377,6 @@
             "m_Id": "c0ec443bd22f4f0f853d58c2baf7623f"
         },
         {
-            "m_Id": "6a1e6073cfd64d1c861b0da7d18bdffc"
-        },
-        {
             "m_Id": "8b4b62bce1cd4dc18fc936d0d2ba8bc8"
         },
         {
@@ -5363,15 +5384,6 @@
         },
         {
             "m_Id": "16838451d04c4b2d90e9a41f137ae0e5"
-        },
-        {
-            "m_Id": "23f759bc6b104fd0a4b1b16a472f6fc9"
-        },
-        {
-            "m_Id": "1457079b7f4c48d1b790c38f9d3d77f1"
-        },
-        {
-            "m_Id": "aca649c63cf948a5b3a5b0422f0970a3"
         }
     ]
 }
@@ -5570,7 +5582,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "f89d60b02e5147e9b99a9e4e973bb481",
     "m_Id": 0,
-    "m_DisplayName": "RotationSpeed",
+    "m_DisplayName": "Main Rotation Speed",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

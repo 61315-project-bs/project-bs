@@ -34,7 +34,7 @@ public class UIManager : Singleton<UIManager>
   public void SetUIScene(GameObject go, bool isNotOverlay = false)
   {
     Canvas canvas = go.GetOrAddComponent<Canvas>();
-    if (!isNotOverlay) canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+    // if (!isNotOverlay) canvas.renderMode = RenderMode.ScreenSpaceOverlay;
     canvas.overrideSorting = true;
     canvas.sortingOrder = -25;
 
