@@ -5,11 +5,7 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerBaseState
 {
-    private float _tempSpeed = 2;
-    public PlayerMoveState(Player player) : base(player)
-    {
-        
-    }
+    public PlayerMoveState(Player player) : base(player) {}
     public override void Enter()
     {
         base.Enter();
@@ -28,8 +24,6 @@ public class PlayerMoveState : PlayerBaseState
     {
         base.Update();
         Vector3 moveDir = new Vector3(_player.InputController.MoveDir.Value.x, 0, _player.InputController.MoveDir.Value.y);
-        _player.transform.position += moveDir * _tempSpeed * Time.deltaTime; // 角力 捞悼 贸府
-        _player.Animator.SetFloat("xDir", moveDir.x);
-        _player.Animator.SetFloat("yDir", moveDir.z);
+        _player.transform.position += moveDir * _player.Temp_PlayerData.MoveSpeed * Time.deltaTime; // 角力 捞悼 贸府
     }
 }
