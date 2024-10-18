@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hologram1
+  m_Name: Hologram_Planet_02
   m_Shader: {fileID: -6465566751694194690, guid: 0966aa6e4f8074fae9065076a98992fb,
     type: 3}
   m_Parent: {fileID: 0}
