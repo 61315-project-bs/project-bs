@@ -3,24 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-
-public class Temp_PlayerData
-{
-    public float MoveSpeed { get; private set; }
-    public float AttackSpeed { get; private set; }
-    public Temp_PlayerData(float moveSpeed, float attackSpeed)
-    {
-        MoveSpeed = moveSpeed;
-        AttackSpeed = attackSpeed;
-    }
-}
-
 public class Player : MonoBehaviour
 {
     [SerializeField] private GunController _gunController;
+    [SerializeField] private TrainerData _trainerData;
     private PlayerStateHandler _playerStateHandler;
-
-    public Temp_PlayerData Temp_PlayerData { get; private set; } = new Temp_PlayerData(2, 0.5f);
+    public PlayerBaseData PlayerBaseData { get; private set; } = new PlayerBaseData();
+    public TrainerData TrainerData { get { return _trainerData; } }
     public GunController GunController { get { return _gunController; } }
     public Animator Animator { get; private set; }
     public FsmRunner FsmRunner { get; private set; }
