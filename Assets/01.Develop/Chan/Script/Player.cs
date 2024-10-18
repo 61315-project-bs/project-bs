@@ -1,15 +1,18 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
+
+
+
 public class Player : MonoBehaviour
 {
     [SerializeField] private GunController _gunController;
-    [SerializeField] private TrainerData _trainerData;
-    private PlayerStateHandler _playerStateHandler;
+    [SerializeField] private TrainerData<Pistol, Boost> _trainerData;
+    public PlayerStateHandler PlayerStateHandler { get; private set; }
     public PlayerBaseData PlayerBaseData { get; private set; } = new PlayerBaseData();
-    public TrainerData TrainerData { get { return _trainerData; } }
+    public TrainerData<Pistol, Boost> TrainerData { get { return _trainerData; } }
     public GunController GunController { get { return _gunController; } }
     public Animator Animator { get; private set; }
     public FsmRunner FsmRunner { get; private set; }
@@ -21,7 +24,7 @@ public class Player : MonoBehaviour
     private void Init()
     {
         FsmRunner = new FsmRunner();
-        _playerStateHandler = new PlayerStateHandler(this);
+        PlayerStateHandler = new PlayerStateHandler(this);
         Animator = GetComponent<Animator>();
         InitInputController();
         _gunController.InitGun();
