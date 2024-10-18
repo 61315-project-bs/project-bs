@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 public class PlayerBaseData
@@ -20,23 +20,35 @@ public class PlayerBaseData
 }
 
 [Serializable]
-public class TrainerData
+public class TrainerData<T, U> where T : Gun where U : UltimateSkill
 {
-    public Gun HandleGun;
-    public Action UltimateSkill;
+    public int Id;
+    public T HandleGun;
+    public U UltimateSkill;
 }
 
-[Serializable]
 public class Gun
 {
+    public int Id;
     public int MaxMagazine;
     public float Damage;
     public float ReloadTime;
     public float AttackSpeed;
 }
-
+[Serializable]
 public class Pistol : Gun
 {
 
 }
 
+public class UltimateSkill
+{
+    public int Id;
+    public float CoolTime;
+}
+[Serializable]
+public class Boost : UltimateSkill
+{
+    public float Duration;
+    public float BoostSpeed;
+}
