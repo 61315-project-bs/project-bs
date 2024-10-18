@@ -8,6 +8,7 @@ public class PlayerStateHandler
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState {get; private set; }
     public PlayerPauseState PauseState { get; private set; }
+    public PlayerUseSkillState UseSkillState { get; private set; }
 
     public PlayerStateHandler(Player player)
     {
@@ -15,5 +16,6 @@ public class PlayerStateHandler
         IdleState = new PlayerIdleState(player);
         MoveState = new PlayerMoveState(player);
         PauseState = new PlayerPauseState(player);
+        UseSkillState = new PlayerUseSkillState(player);
     }
 }

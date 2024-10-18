@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-
+// 스킬 사용을 위한 Modifier
+public class Temp_PlayerModifier
+{
+    public float MoveSpeed = 1.0f;
+}
 
 
 public class Player : MonoBehaviour
@@ -13,6 +17,7 @@ public class Player : MonoBehaviour
     public PlayerStateHandler PlayerStateHandler { get; private set; }
     public PlayerBaseData PlayerBaseData { get; private set; } = new PlayerBaseData();
     public TrainerData<Pistol, Boost> TrainerData { get { return _trainerData; } }
+    public Temp_PlayerModifier Modifier { get; private set; } = new Temp_PlayerModifier();
     public GunController GunController { get { return _gunController; } }
     public Animator Animator { get; private set; }
     public FsmRunner FsmRunner { get; private set; }
@@ -36,12 +41,13 @@ public class Player : MonoBehaviour
         InputController.InitInputController();
         InputController.MoveDir
             .AsObservable()
+            .Where(_ => FsmRunner.CurrentState != PlayerStateHandler.UseSkillState)
             .Subscribe(dir =>
             {
-                if (dir == Vector2.zero) FsmRunner.CurrentState = _playerStateHandler.IdleState;
-                else FsmRunner.CurrentState = _playerStateHandler.MoveState;
+                if (dir == Vector2.zero) FsmRunner.CurrentState = PlayerStateHandler.IdleState;
+                else FsmRunner.CurrentState = PlayerStateHandler.MoveState;
             }).AddTo(gameObject);
-
+        InputController.Act_UseSkill += () => FsmRunner.CurrentState = PlayerStateHandler.UseSkillState;
     }
     private void OnDisable()
     {

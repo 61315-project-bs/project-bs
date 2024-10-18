@@ -90,7 +90,7 @@ public class GunController : MonoBehaviour
             }).AddTo(gameObject);
 
         Observable.EveryUpdate()
-            .Where(click => Input.GetMouseButton(0) && CurrMagazine.Value > 0)
+            .Where(click => Input.GetMouseButton(0) && CurrMagazine.Value > 0 && _player.FsmRunner.CurrentState != _player.PlayerStateHandler.UseSkillState)
             .ThrottleFirst(TimeSpan.FromSeconds(_player.TrainerData.HandleGun.AttackSpeed * _player.PlayerBaseData.AttackSpeed))
             .Subscribe(pos =>
             {
