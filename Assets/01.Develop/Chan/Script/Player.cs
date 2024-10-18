@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
 
 // 스킬 사용을 위한 Modifier
 public class Temp_PlayerModifier
@@ -23,8 +24,10 @@ public class Player : MonoBehaviour
     public FsmRunner FsmRunner { get; private set; }
     public PlayerInputController InputController { get; private set; }
 
-    public bool IsSkillCooltime = false;
-
+    // SkillController로 따로 뺄 수도 있음.
+    public ReactiveProperty<bool> IsSkillCooltime { get; set; } = new ReactiveProperty<bool>(false);
+    public Action<float, float> SkillCoolTime { get; set; }
+    //~
     private void Start()
     {
         Init();
@@ -52,7 +55,7 @@ public class Player : MonoBehaviour
             }).AddTo(gameObject);
         InputController.Act_UseSkill += () =>
         {
-            if (IsSkillCooltime)
+            if (IsSkillCooltime.Value)
                 return;
             FsmRunner.CurrentState = PlayerStateHandler.UseSkillState;
 

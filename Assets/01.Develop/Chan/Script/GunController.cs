@@ -18,7 +18,7 @@ public class GunController : MonoBehaviour
     private float _distanceToCamera;
 
     public IntReactiveProperty CurrMagazine { get; private set; }
-    public int MaxMagazine { get; private set; } = 10;
+    public int MaxMagazine { get; private set; } = 30;
     public Action Act_OnReload { get; set; }
     public Action<float, float> Act_RealodTime { get; set; }
     public Action<int, int> Act_OnShot { get; set; }

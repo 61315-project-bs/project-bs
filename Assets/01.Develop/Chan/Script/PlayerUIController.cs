@@ -10,14 +10,19 @@ public class PlayerGunUI
 {
     public Text Txt_Mag;
     public Image Img_Reloading;
-    public Text Txt_Reloading;
 }
 
+[Serializable]
+public class PlayerSkillUI
+{
+    public Image Img_CoolTime;
+    public Text Txt_CoolTime;
+}
 public class PlayerUIController : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private PlayerGunUI _playerGunUi;
-
+    [SerializeField] private PlayerSkillUI _playerSkillUi;
 
     void Start()
     {
@@ -30,6 +35,13 @@ public class PlayerUIController : MonoBehaviour
         _player.GunController.Act_OnShot += OnShot;
         _player.GunController.Act_OnReload += OnReload;
         _player.GunController.Act_RealodTime += OnReloadTime;
+        _player.IsSkillCooltime
+            .AsObservable()
+            .Subscribe(isCooltime =>
+            {
+                _playerSkillUi.Txt_CoolTime.text = isCooltime ? "Use Skill!" : "";
+            }).AddTo(gameObject);
+        _player.SkillCoolTime += OnSkillCoolTime;
     }
 
     private void OnShot(int currMag, int maxMag)
@@ -46,5 +58,13 @@ public class PlayerUIController : MonoBehaviour
         float progress = 1.0f - currTime / maxTime;
         _playerGunUi.Img_Reloading.fillAmount = progress;
     }
+
+    private void OnSkillCoolTime(float currTime, float maxTime)
+    {
+        float progress = 1.0f - currTime / maxTime;
+        _playerSkillUi.Img_CoolTime.fillAmount = progress;
+        _playerSkillUi.Txt_CoolTime.text = (maxTime - currTime).ToString("N2");
+    }
+
 
 }
