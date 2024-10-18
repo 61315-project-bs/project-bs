@@ -59,6 +59,7 @@ public class GunController : MonoBehaviour
             .AsObservable()
             .Subscribe(mag =>
             {
+                Act_OnShot?.Invoke(mag, MaxMagazine);
                 if (mag < 1)
                 {
                     if (IE_OnReload_Handle != null || CurrMagazine.Value == _player.TrainerData.HandleGun.MaxMagazine || MaxMagazine == 0)
@@ -66,7 +67,6 @@ public class GunController : MonoBehaviour
                     else
                         Act_OnReload?.Invoke();
                 }
-                Act_OnShot?.Invoke(mag, MaxMagazine);
             }).AddTo(gameObject);
 
     }
@@ -135,18 +135,27 @@ public class GunController : MonoBehaviour
             Act_RealodTime?.Invoke(currTime, maxTime);
             yield return null;
         }
-        if (MaxMagazine > _player.TrainerData.HandleGun.MaxMagazine)
+        // 현재 가지고 있는 총알이 최대 장전 가능 갯수보다 많으면
+
+        int tempMaxMagazine = MaxMagazine;
+        int loadBullet = _player.TrainerData.HandleGun.MaxMagazine - CurrMagazine.Value;
+        tempMaxMagazine -= loadBullet;
+
+        if (tempMaxMagazine < 0)
         {
-            MaxMagazine -= _player.TrainerData.HandleGun.MaxMagazine;
-            CurrMagazine.Value = _player.TrainerData.HandleGun.MaxMagazine;
-        }
-        else
-        {
-            // reactiveproperty가 실행될 때 MaxMagazine의 값을 받아온다. 그렇기 때문에 value를 Max로 받고 0으로 바꿔주면 표기 오류가 발생한다.
-            // 따라서 temp 값을 두어 로직을 구성했음.
-            int temp = MaxMagazine;
+            tempMaxMagazine = MaxMagazine;
             MaxMagazine = 0;
-            CurrMagazine.Value = temp;
+            CurrMagazine.Value += tempMaxMagazine;
+        }
+        else if(tempMaxMagazine >= _player.TrainerData.HandleGun.MaxMagazine)
+        {
+            MaxMagazine -= loadBullet;
+            CurrMagazine.Value += loadBullet;
+        }
+        else // 0보단 크지만 8보단 작은
+        {
+            MaxMagazine = tempMaxMagazine;
+            CurrMagazine.Value += loadBullet;
         }
         IE_OnReload_Handle = null;
     }
