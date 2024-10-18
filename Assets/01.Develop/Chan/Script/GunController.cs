@@ -11,7 +11,6 @@ public class GunController : MonoBehaviour
     [SerializeField] private GameObject _bullet;
     [SerializeField] private Transform _firePos;
 
-    private WaitForSeconds _waitReloadTime;
     private CinemachineBrain _cameraBrain;
     private IEnumerator IE_OnReload_Handle = null;
     private Vector3 _mousePosition;
@@ -19,7 +18,10 @@ public class GunController : MonoBehaviour
     private float _distanceToCamera;
 
     public IntReactiveProperty CurrMagazine { get; private set; }
-    public int MaxMagazine { get; set; } = 100;
+    public int MaxMagazine { get; private set; } = 10;
+    public Action Act_OnReload { get; set; }
+    public Action<float, float> Act_RealodTime { get; set; }
+    public Action<int, int> Act_OnShot { get; set; }
     
     public void InitGun()
     {
@@ -49,17 +51,22 @@ public class GunController : MonoBehaviour
 
     private void InitData()
     {
-        _waitReloadTime = new WaitForSeconds(_player.TrainerData.HandleGun.ReloadTime);
         MaxMagazine -= _player.TrainerData.HandleGun.MaxMagazine;
+        Act_OnReload += OnReload;
+        _player.InputController.Act_Reload = Act_OnReload;
         CurrMagazine = new IntReactiveProperty(_player.TrainerData.HandleGun.MaxMagazine);
         CurrMagazine
             .AsObservable()
             .Subscribe(mag =>
             {
-                if (mag <= 1)
-                    OnReload();
-                Debug.Log($"Gun::::MaxMagazine::::{MaxMagazine}");
-                Debug.Log($"Gun::::CurrMagazine::::{mag}");
+                Act_OnShot?.Invoke(mag, MaxMagazine);
+                if (mag < 1)
+                {
+                    if (IE_OnReload_Handle != null || CurrMagazine.Value == _player.TrainerData.HandleGun.MaxMagazine || MaxMagazine == 0)
+                        return;
+                    else
+                        Act_OnReload?.Invoke();
+                }
             }).AddTo(gameObject);
 
     }
@@ -116,14 +123,18 @@ public class GunController : MonoBehaviour
 
     private void OnReload()
     {
-        if (IE_OnReload_Handle != null)
-            return;
         StartCoroutine(IE_OnReload_Handle = IE_OnReload());
     }
     private IEnumerator IE_OnReload()
     {
-        Debug.Log($"Gun::::Start::::Reload");
-        yield return _waitReloadTime;
+        float currTime = 0.0f;
+        float maxTime = _player.TrainerData.HandleGun.ReloadTime;
+        while(currTime < maxTime)
+        {
+            currTime += Time.deltaTime;
+            Act_RealodTime?.Invoke(currTime, maxTime);
+            yield return null;
+        }
         if (MaxMagazine > _player.TrainerData.HandleGun.MaxMagazine)
         {
             MaxMagazine -= _player.TrainerData.HandleGun.MaxMagazine;
@@ -134,7 +145,6 @@ public class GunController : MonoBehaviour
             CurrMagazine.Value = MaxMagazine;
             MaxMagazine = 0;
         }
-        Debug.Log($"Gun::::Complete::::Reload");
         IE_OnReload_Handle = null;
     }
 }
