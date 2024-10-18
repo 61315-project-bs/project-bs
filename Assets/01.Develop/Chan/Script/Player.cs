@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
     public Animator Animator { get; private set; }
     public FsmRunner FsmRunner { get; private set; }
     public PlayerInputController InputController { get; private set; }
+
+    public bool IsSkillCooltime = false;
+
     private void Start()
     {
         Init();
@@ -47,7 +50,13 @@ public class Player : MonoBehaviour
                 if (dir == Vector2.zero) FsmRunner.CurrentState = PlayerStateHandler.IdleState;
                 else FsmRunner.CurrentState = PlayerStateHandler.MoveState;
             }).AddTo(gameObject);
-        InputController.Act_UseSkill += () => FsmRunner.CurrentState = PlayerStateHandler.UseSkillState;
+        InputController.Act_UseSkill += () =>
+        {
+            if (IsSkillCooltime)
+                return;
+            FsmRunner.CurrentState = PlayerStateHandler.UseSkillState;
+
+        };
     }
     private void OnDisable()
     {

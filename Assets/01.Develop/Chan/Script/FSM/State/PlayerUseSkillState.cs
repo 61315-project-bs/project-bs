@@ -37,6 +37,7 @@ public class PlayerUseSkillState : PlayerBaseState
     {
         Boost boost = _player.TrainerData.UltimateSkill;
         _player.Animator.SetBool("isUseSkill", true);
+        _player.IsSkillCooltime = true;
         yield return IE_WaitTime();
         yield return IE_SkillEffect(boost);
         yield return IE_Cooltime(boost);
@@ -76,6 +77,7 @@ public class PlayerUseSkillState : PlayerBaseState
             currTime += Time.deltaTime;
             yield return null;
         }
+        _player.IsSkillCooltime = false;
         IE_OnUseSkillHandle = null;
     }
 }
