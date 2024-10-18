@@ -1,21 +1,33 @@
 ﻿using Cinemachine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
+// 추후 부사수(trainer)와 분리될 가능성이 있음.
 public class GunController : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private GameObject _bullet;
     [SerializeField] private Transform _firePos;
 
+    private WaitForSeconds _waitReloadTime;
     private CinemachineBrain _cameraBrain;
+    private IEnumerator IE_OnReload_Handle = null;
+    private Vector3 _mousePosition;
     private float _rotOffset = 180;
     private float _distanceToCamera;
-    private Vector3 _mousePosition;
+
+    public IntReactiveProperty CurrMagazine { get; private set; }
+    public int MaxMagazine { get; set; } = 100;
+    
     public void InitGun()
+    {
+        SetCamera();
+        InitData();
+        InitInput();
+    }
+    private void SetCamera()
     {
         // 만약  Cinemachine 카메라를 사용하면서 ScreenToWorldPoint를 사용해야 한다면 반드시 아래 로직을 적용해줘야 한다.
         _cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
@@ -31,10 +43,25 @@ public class GunController : MonoBehaviour
                 }
             }
         });
-
         // init distance
         _distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
-        InitInput();
+    }
+
+    private void InitData()
+    {
+        _waitReloadTime = new WaitForSeconds(_player.TrainerData.HandleGun.ReloadTime);
+        MaxMagazine -= _player.TrainerData.HandleGun.MaxMagazine;
+        CurrMagazine = new IntReactiveProperty(_player.TrainerData.HandleGun.MaxMagazine);
+        CurrMagazine
+            .AsObservable()
+            .Subscribe(mag =>
+            {
+                if (mag <= 1)
+                    OnReload();
+                Debug.Log($"Gun::::MaxMagazine::::{MaxMagazine}");
+                Debug.Log($"Gun::::CurrMagazine::::{mag}");
+            }).AddTo(gameObject);
+
     }
 
     private void InitInput()
@@ -56,18 +83,19 @@ public class GunController : MonoBehaviour
             }).AddTo(gameObject);
 
         Observable.EveryUpdate()
-            .Where(click => Input.GetMouseButton(0))
-            .ThrottleFirst(TimeSpan.FromSeconds(_player.Temp_PlayerData.AttackSpeed))
+            .Where(click => Input.GetMouseButton(0) && CurrMagazine.Value > 0)
+            .ThrottleFirst(TimeSpan.FromSeconds(_player.TrainerData.HandleGun.AttackSpeed * _player.PlayerBaseData.AttackSpeed))
             .Subscribe(pos =>
             {
                 Bullet bullet = Instantiate(_bullet).GetComponent<Bullet>();
                 bullet.SetBullet(new Bullet_Data(_firePos.position, _mousePosition, 10, 10));
                 bullet.OnFire();
+                CurrMagazine.Value--;
             }).AddTo(gameObject);
     }
 
 
-    public Vector2 AimDirection(float rot)
+    private Vector2 AimDirection(float rot)
     {
         if (rot > 315 || rot < 45) return Vector2.left;
         else if (rot > 45 && rot < 135) return Vector2.down;
@@ -79,10 +107,34 @@ public class GunController : MonoBehaviour
             return Vector2.zero;
         }
     }
-    public int AimDirection_LR(float rot)
+    private int AimDirection_LR(float rot)
     {
         if (rot > 270 || rot < 90) return 1;
         else if (rot > 90 || rot < 270) return 2;
         else return -1;
+    }
+
+    private void OnReload()
+    {
+        if (IE_OnReload_Handle != null)
+            return;
+        StartCoroutine(IE_OnReload_Handle = IE_OnReload());
+    }
+    private IEnumerator IE_OnReload()
+    {
+        Debug.Log($"Gun::::Start::::Reload");
+        yield return _waitReloadTime;
+        if (MaxMagazine > _player.TrainerData.HandleGun.MaxMagazine)
+        {
+            MaxMagazine -= _player.TrainerData.HandleGun.MaxMagazine;
+            CurrMagazine.Value = _player.TrainerData.HandleGun.MaxMagazine;
+        }
+        else
+        { 
+            CurrMagazine.Value = MaxMagazine;
+            MaxMagazine = 0;
+        }
+        Debug.Log($"Gun::::Complete::::Reload");
+        IE_OnReload_Handle = null;
     }
 }

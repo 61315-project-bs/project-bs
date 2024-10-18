@@ -18624,6 +18624,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunController: {fileID: 6900986631322967474}
+  _trainerData:
+    HandleGun:
+      MaxMagazine: 8
+      Damage: 10
+      ReloadTime: 3
+      AttackSpeed: 0.5
 --- !u!4 &911466015
 Transform:
   m_ObjectHideFlags: 0
