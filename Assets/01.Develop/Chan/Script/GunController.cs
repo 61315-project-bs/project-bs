@@ -59,7 +59,6 @@ public class GunController : MonoBehaviour
             .AsObservable()
             .Subscribe(mag =>
             {
-                Act_OnShot?.Invoke(mag, MaxMagazine);
                 if (mag < 1)
                 {
                     if (IE_OnReload_Handle != null || CurrMagazine.Value == _player.TrainerData.HandleGun.MaxMagazine || MaxMagazine == 0)
@@ -67,6 +66,7 @@ public class GunController : MonoBehaviour
                     else
                         Act_OnReload?.Invoke();
                 }
+                Act_OnShot?.Invoke(mag, MaxMagazine);
             }).AddTo(gameObject);
 
     }
@@ -141,9 +141,12 @@ public class GunController : MonoBehaviour
             CurrMagazine.Value = _player.TrainerData.HandleGun.MaxMagazine;
         }
         else
-        { 
-            CurrMagazine.Value = MaxMagazine;
+        {
+            // reactiveproperty가 실행될 때 MaxMagazine의 값을 받아온다. 그렇기 때문에 value를 Max로 받고 0으로 바꿔주면 표기 오류가 발생한다.
+            // 따라서 temp 값을 두어 로직을 구성했음.
+            int temp = MaxMagazine;
             MaxMagazine = 0;
+            CurrMagazine.Value = temp;
         }
         IE_OnReload_Handle = null;
     }
