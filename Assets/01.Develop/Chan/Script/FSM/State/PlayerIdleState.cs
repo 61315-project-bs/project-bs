@@ -20,6 +20,6 @@ public class PlayerIdleState : PlayerBaseState
     public override void Update()
     {
         base.Update();
-        Debug.Log("Update::::PlayerIdleState");
+        //Debug.Log("Update::::PlayerIdleState");
     }
 }

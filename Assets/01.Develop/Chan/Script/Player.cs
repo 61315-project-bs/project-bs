@@ -1,35 +1,68 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
+
+// 스킬 사용을 위한 Modifier
+public class Temp_PlayerModifier
+{
+    public float MoveSpeed = 1.0f;
+}
 
 
 public class Player : MonoBehaviour
 {
-    private FsmRunner _fmsRunner;
-    private PlayerStateHandler _playerStateHandler;
+    [SerializeField] private GunController _gunController;
+    [SerializeField] private TrainerData<Pistol, Boost> _trainerData;
+    public PlayerStateHandler PlayerStateHandler { get; private set; }
+    public PlayerBaseData PlayerBaseData { get; private set; } = new PlayerBaseData();
+    public TrainerData<Pistol, Boost> TrainerData { get { return _trainerData; } }
+    public Temp_PlayerModifier Modifier { get; private set; } = new Temp_PlayerModifier();
+    public GunController GunController { get { return _gunController; } }
+    public Animator Animator { get; private set; }
+    public FsmRunner FsmRunner { get; private set; }
+    public PlayerInputController InputController { get; private set; }
+
+    // SkillController로 따로 뺄 수도 있음.
+    public ReactiveProperty<bool> IsSkillCooltime { get; set; } = new ReactiveProperty<bool>(false);
+    public Action<float, float> SkillCoolTime { get; set; }
+    //~
     private void Start()
     {
         Init();
     }
     private void Init()
     {
-        _fmsRunner = new FsmRunner();
-        _playerStateHandler = new PlayerStateHandler(this);
-    }
-    private void Update()
-    {
-        _fmsRunner.CurrentState?.Update();
-        if(Input.GetKeyDown(KeyCode.A)) _fmsRunner.CurrentState = _playerStateHandler._idleState;
-        if (Input.GetKeyDown(KeyCode.S)) _fmsRunner.CurrentState = _playerStateHandler._moveState;
-    }
-    private void FixedUpdate()
-    {
-        _fmsRunner.CurrentState?.PhysicsUpdate();
+        FsmRunner = new FsmRunner();
+        PlayerStateHandler = new PlayerStateHandler(this);
+        Animator = GetComponent<Animator>();
+        InitInputController();
+        _gunController.InitGun();
     }
 
+    private void InitInputController()
+    {
+        InputController = GetComponent<PlayerInputController>();
+        InputController.InitInputController();
+        InputController.MoveDir
+            .AsObservable()
+            .Where(_ => FsmRunner.CurrentState != PlayerStateHandler.UseSkillState)
+            .Subscribe(dir =>
+            {
+                if (dir == Vector2.zero) FsmRunner.CurrentState = PlayerStateHandler.IdleState;
+                else FsmRunner.CurrentState = PlayerStateHandler.MoveState;
+            }).AddTo(gameObject);
+        InputController.Act_UseSkill += () =>
+        {
+            if (IsSkillCooltime.Value)
+                return;
+            FsmRunner.CurrentState = PlayerStateHandler.UseSkillState;
+
+        };
+    }
     private void OnDisable()
     {
-        _fmsRunner.Dispose();
+        FsmRunner.Dispose();
     }
 }
