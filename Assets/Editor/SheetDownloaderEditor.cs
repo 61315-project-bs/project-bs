@@ -23,7 +23,7 @@ public class ToolsSheetDownloader : EditorWindow
 
     SheetInfo[] _sheets = new SheetInfo[]
     {
-        new SheetInfo { Name = "TestData", Id = "1583897051" },
+        new SheetInfo { Name = "MapData", Id = "1165144083" },
     };
 
     private int _pendingDownloads = 0;

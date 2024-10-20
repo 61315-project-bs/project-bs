@@ -1,5 +1,3 @@
-using UnityEngine;
-
 /// <summary>
 /// CSV : 모든 데이터 로드해서 딕셔너리로 만들어주기
 /// Json : 로컬에 데이터 저장하고 불러오기
@@ -7,7 +5,7 @@ using UnityEngine;
 public class DataManager : Singleton<DataManager>
 {
   public DefaultData DefaultData { get; private set; }
-
+  public SaveData SaveData { get; private set; }
   protected override void Awake()
   {
     _isDontDestroyOnLoad = true;
@@ -16,6 +14,7 @@ public class DataManager : Singleton<DataManager>
     DefaultData = new DefaultData();
     DefaultData.Init();
 
-    Debug.Log(DefaultData.TestData["1"].Name);
+    SaveData = new SaveData();
+    SaveData.Init();
   }
 }

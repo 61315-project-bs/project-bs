@@ -9,20 +9,21 @@ public class DefaultDataLoader
 {
   private static string _csvPath = "CSV";
 
-  private static string TestData = "TestData";
+  private static string MapData = "MapData";
 
-  public static Dictionary<string, TestData> ParseTestData()
+  public static Dictionary<string, MapData> ParseMapData()
   {
-    List<Dictionary<string, object>> _tempData = CSVReader.Read($"{_csvPath}/{TestData}");
+    List<Dictionary<string, object>> _tempData = CSVReader.Read($"{_csvPath}/{MapData}");
 
-    Dictionary<string, TestData> dic = new Dictionary<string, TestData>();
+    Dictionary<string, MapData> dic = new Dictionary<string, MapData>();
 
     for (int i = 0; i < _tempData.Count; i++)
     {
-      TestData data = new TestData();
+      MapData data = new MapData();
 
       data.Id = _tempData[i]["Id"].ToString();
       data.Name = _tempData[i]["Name"].ToString();
+      data.Name = _tempData[i]["Description"].ToString();
 
       if (dic.ContainsKey(data.Id))
       {
@@ -36,7 +37,7 @@ public class DefaultDataLoader
 
     if (dic == null)
     {
-      Debug.LogError($"TestData");
+      Debug.LogError($"MapData");
     }
 
     return dic;

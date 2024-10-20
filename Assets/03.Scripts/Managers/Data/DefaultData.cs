@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class DefaultData
 {
-  public Dictionary<string, TestData> TestData { get; private set; }
+  public Dictionary<string, MapData> MapData { get; private set; }
 
   public void Init()
   {
@@ -18,7 +18,7 @@ public class DefaultData
     try
     {
       // ----- CSV 데이터 로드 시작 -----
-      TestData = DefaultDataLoader.ParseTestData();
+      MapData = DefaultDataLoader.ParseMapData();
     }
     catch (System.Exception ex)
     {
