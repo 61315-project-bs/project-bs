@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 2913304261919348875}
   - component: {fileID: 1324773036426136923}
   m_Layer: 5
-  m_Name: AbilityCard
+  m_Name: UISubItem_AbilityCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
