@@ -5,19 +5,6 @@ using UnityEngine.UI;
 using System;
 using UniRx;
 
-[Serializable]
-public class PlayerGunUI
-{
-    public Text Txt_Mag;
-    public Image Img_Reloading;
-}
-
-[Serializable]
-public class PlayerSkillUI
-{
-    public Image Img_CoolTime;
-    public Text Txt_CoolTime;
-}
 public class PlayerUIController : MonoBehaviour
 {
     [SerializeField] private Player _player;
