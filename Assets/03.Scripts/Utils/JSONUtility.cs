@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
 
-public static class JsonUtilityHelper
+public static class JSONUtility
 {
   private static string GetFilePath<T>()
   {

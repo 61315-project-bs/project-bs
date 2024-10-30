@@ -13,7 +13,7 @@ public class DefaultDataLoader
 
   public static Dictionary<string, MapData> ParseMapData()
   {
-    List<Dictionary<string, object>> _tempData = CSVReader.Read($"{_csvPath}/{MapData}");
+    List<Dictionary<string, object>> _tempData = CSVUtility.Read($"{_csvPath}/{MapData}");
 
     Dictionary<string, MapData> dic = new Dictionary<string, MapData>();
 

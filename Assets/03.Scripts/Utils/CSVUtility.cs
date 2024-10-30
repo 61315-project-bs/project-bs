@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Resources에 있는 csv 파일을 읽어서 List<Dictionary<string, object>> 타입으로 준다
 /// </summary>
-public static class CSVReader
+public static class CSVUtility
 {
   static string _splitRe = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
   static string _lineSplitRe = @"\r\n|\n\r|\n|\r";
